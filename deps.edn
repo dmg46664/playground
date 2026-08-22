@@ -1,0 +1,78 @@
+{:paths ["src" "resources"]
+ :deps {org.clojure/clojure {:mvn/version "1.11.1"}
+
+        exoscale/interceptor {:mvn/version "0.1.17"}
+
+        org.scicloj/clay {:mvn/version "2-beta17"}
+        same/ish {:mvn/version "0.1.6"}
+        org.scicloj/noj {:mvn/version "2-beta24"}
+
+
+        org.slf4j/slf4j-simple    {:mvn/version "2.0.0-alpha6"}
+        cheshire/cheshire {:mvn/version "6.1.0"}
+
+        ;;com.xtdb/xtdb-core {:mvn/version "1.20.0"}
+        ;;com.xtdb/xtdb-rocksdb {:mvn/version "1.20.0"}
+
+        ;;https://nextjournal.com/schmudde/java-time
+        com.widdindustries/time-literals {:mvn/version "0.1.6"}
+        cljc.java-time/cljc.java-time {:mvn/version "0.1.18"}
+        tick/tick {:mvn/version "0.5.0"}
+
+        generateme/fastmath {:mvn/version "2.1.6"}
+
+        com.taoensso/timbre {:mvn/version "5.2.1"}
+
+        com.rpl/specter {:mvn/version "1.1.4"}
+
+        org.babashka/cli {:mvn/version "0.3.34"}
+        org.rocksdb/rocksdbjni {:mvn/version "7.0.3"}
+
+        org.babashka/http-client {:mvn/version "0.4.23"}
+        babashka/fs {:mvn/version "0.5.33"}} ; :deps
+ :aliases
+ {;;clj -X:extract-all
+  :extract-all {:exec-fn dimigi.extraction/exec-all-exchanges-all-letters!}
+
+  ;;Example of how to use from command line:
+  ;clj -M:extract-select :exchanges NYSE NASDAQ FTSE100 :char-range a c
+  ;;or
+  ;clj -M:extract-select :exchanges FTSE100 :char-range k
+  :extract-select {:extra-deps
+                   {nrepl/nrepl {:mvn/version "1.4.0"}
+
+                    org.babashka/cli {:mvn/version "0.8.66"}}
+                   :main-opts ["-m" "babashka.cli.exec" "dimigi.extraction/-main"]}
+
+  :run-m     {:main-opts ["-m" "dimigi.stonkscreener"]} ;; :run-m
+  :run-x     {:ns-default dimigi.stonkscreener} ; :run-x
+
+  :clerk {:extra-deps {cider/cider-nrepl {:mvn/version "0.26.0"}}
+          :main-opts  ["-m" "nrepl.cmdline"
+                       "--port" "4444"
+                       "--middleware" "[cider.nrepl/cider-middleware]"
+                       "-i"]}
+  :portal {djblue/portal {:mvn/version "0.63.1"}}
+
+  ;; https://github.com/xtdb/xtdb/issues/1518
+  :M1 {:extra-deps {nrepl/nrepl {:mvn/version "0.8.3"}
+                    cider/cider-nrepl {:mvn/version "0.26.0"}
+                   ;; org.rocksdb/rocksdbjni {:mvn/version "7.0.3"}
+
+                    ;; org.rocksdb/rocksdbjni {:local/root "rocksdbjni/rocksdbjni-7.0.0-osx.jar"} ;;; :rocksdb ;; :M1
+
+                            ;; :kaocha alias
+} ;:extra-deps
+} ;:M1 !
+  :test   {:extra-paths ["test"]
+           :extra-deps  {org.clojure/test.check {:mvn/version "1.1.1"}
+                         io.github.cognitect-labs/test-runner
+                         {:git/tag "v0.5.0" :git/sha "48c3c67"}} ;:extra-deps
+} ;:test
+  :kaocha {:extra-paths ["test"]
+           :main-opts ["-m" "kaocha.runner"]
+           :extra-deps {lambdaisland/kaocha {:mvn/version "1.0.887"} ;; kaocha lib
+} ; :extra-deps
+} ;; :kaocha
+} ;:aliases
+ } ;:file
